@@ -11,7 +11,7 @@
   </van-nav-bar>
 
   <div id="content">
-    <router-view />
+    <router-view/>
   </div>
 
   <van-tabbar route @change="onChange">
@@ -40,5 +40,7 @@ const onChange = (index) => showToast(`标签 ${index}`);
 </script>
 
 <style scoped>
-
+#content {
+  padding-bottom: 50px;
+}
 </style>
