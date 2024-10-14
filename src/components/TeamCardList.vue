@@ -24,6 +24,9 @@
       </template>
       <template #footer>
         <van-button size="small" type="primary" plain @click="doJoinTeam(team.id)">加入队伍</van-button>
+        <van-button v-if="team.userId === currentUser?.id" size="small" plain
+                    @click="doUpdateTeam(team.id)">更新队伍
+        </van-button>
       </template>
     </van-card>
   </div>
@@ -35,6 +38,8 @@ import {teamStatusMap} from "../constants/team";
 import ikun from '../assets/ikun.png';
 import myAxios from "../plugins/myAxios.ts";
 import {showFailToast, showSuccessToast} from "vant";
+import {getCurrentUser} from "../services/user.ts";
+import {onMounted, ref} from "vue";
 
 interface TeamCardListProps {
   teamList: TeamType[];
@@ -43,6 +48,12 @@ interface TeamCardListProps {
 const props = withDefaults(defineProps<TeamCardListProps>(), {
   teamList: [] as TeamType[],
 });
+
+const currentUser = ref();
+
+onMounted(async () => {
+  currentUser.value = await getCurrentUser();
+})
 
 // 加入队伍
 const doJoinTeam = async (teamId: number) => {
