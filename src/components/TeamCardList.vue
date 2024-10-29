@@ -27,7 +27,8 @@
         <van-button v-if="team.userId === currentUser?.id" size="small" plain
                     @click="doUpdateTeam(team.id)">更新队伍
         </van-button>
-        <van-button v-if="team.userId === currentUser?.id" size="small" plain
+        <!-- todo 仅加入队伍可见 -->
+        <van-button size="small" plain
                     @click="doQuitTeam(team.id)">退出队伍
         </van-button>
         <van-button v-if="team.userId === currentUser?.id" size="small" plain
@@ -70,7 +71,7 @@ onMounted(async () => {
  */
 const doJoinTeam = async (id: number) => {
   const res = await myAxios.post('/team/join', {
-    id
+    teamId: id
   });
   if (res?.code === 0) {
     showSuccessToast('加入队伍成功');
@@ -79,6 +80,10 @@ const doJoinTeam = async (id: number) => {
   }
 };
 
+/**
+ * 跳转至更新队伍页
+ * @param id
+ */
 const doUpdateTeam = (id: number) => {
   router.push({
     path: '/team/update',
@@ -88,6 +93,35 @@ const doUpdateTeam = (id: number) => {
   })
 }
 
+/**
+ * 退出队伍
+ * @param id
+ */
+const doQuitTeam = async (id: number) => {
+  const res = await myAxios.post('/team/quit', {
+    teamId: id
+  });
+  if (res?.code === 0) {
+    showSuccessToast('操作成功');
+  } else {
+    showFailToast('操作失败' + (res.description ? `,${res.description}` : ''));
+  }
+}
+
+/**
+ * 解散队伍
+ * @param id
+ */
+const doDeleteTeam = async (id: number) => {
+  const res = await myAxios.post('/team/delete', {
+    id
+  });
+  if (res?.code === 0) {
+    showSuccessToast('操作成功');
+  } else {
+    showFailToast('操作失败' + (res.description ? `,${res.description}` : ''));
+  }
+}
 </script>
 
 <style scoped>
