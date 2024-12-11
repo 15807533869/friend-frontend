@@ -1,6 +1,6 @@
 <template>
   <van-nav-bar
-      title="标题"
+      :title="title"
       left-arrow
       @click-left="onClickLeft"
       @click-right="onClickRight"
@@ -21,10 +21,25 @@
   </van-tabbar>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {useRouter} from "vue-router";
+import {ref} from "vue";
+import routes from "../config/route.js";
 
 const router = useRouter();
+const DEFAULT_TITLE = '好友网';
+const title = ref(DEFAULT_TITLE);
+
+/**
+ * 根据路由切换标题
+ */
+router.beforeEach((to, from) => {
+  const toPath = to.path;
+  const route = routes.find((route) => {
+    return toPath == route.path;
+  })
+  title.value = route?.title ?? DEFAULT_TITLE;
+})
 
 const onClickLeft = () => {
   router.back();
